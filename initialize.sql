@@ -1,6 +1,5 @@
-CREATE DATABASE applepie_store_sales_simulation;
-
-\c applepie_store_sales_simulation;
+CREATE DATABASE applepie_store_sim;
+\c applepie_store_sim;
 
 CREATE TABLE stores (
   store_id serial PRIMARY KEY,
@@ -19,7 +18,8 @@ CREATE TABLE sales_records (
   store_id int NOT NULL,
   item_id int NOT NULL,
   sales_quantity int NOT NULL,
-  sales_date timestamp NOT NULL
+  sales_date timestamp NOT NULL,
+  total int NOT NULL
 );
 
 INSERT INTO stores (store_name, store_address) VALUES
@@ -37,3 +37,16 @@ INSERT INTO items (item_name, item_price) VALUES
 ('ココナッツパイン アップル', 450),
 ('リコッタチーズとブルーベリーのアップルパイ', 300),
 ('ヨーグルト アップルパイ', 600);
+
+INSERT INTO sales_records (store_id, item_id, sales_quantity, sales_date, total)
+WITH T1 AS ( 
+    SELECT floor(random()*5)+1 as store_id,
+        floor(random()*7)+1 as item_id,
+        floor(random()*24)+1 as sales_quantity,
+        '2023-01-01'::date + floor(random() * (365))::int as sales_date
+    FROM generate_series(1, 10000)
+)
+SELECT T1.store_id, T1.item_id, T1.sales_quantity, T1.sales_date,
+    items.item_price * sales_quantity * 1.1 as total
+FROM T1
+LEFT OUTER JOIN items ON T1.item_id=items.item_id;
