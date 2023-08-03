@@ -17,7 +17,7 @@ func main() {
   // データベースに接続する
   db, err := sql.Open("postgres", "host=" + ip +
   " user=postgres password=Welcome1 " +
-  "dbname=applepie_store_sim")
+  "dbname=applepie_store_sim sslmode=disable")
   if err != nil {
     log.Fatal(err)
   }

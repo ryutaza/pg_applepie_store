@@ -44,7 +44,7 @@ WITH T1 AS (
         floor(random()*7)+1 as item_id,
         floor(random()*24)+1 as sales_quantity,
         '2023-01-01'::date + floor(random() * (365))::int as sales_date
-    FROM generate_series(1, 10000)
+    FROM generate_series(1, 1000)
 )
 SELECT T1.store_id, T1.item_id, T1.sales_quantity, T1.sales_date,
     items.item_price * sales_quantity * 1.1 as total
